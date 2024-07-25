@@ -1,0 +1,34 @@
+.sidebarCol.col-lg-2 {
+    padding: 0;
+    margin: 0;
+}
+
+
+.sidebarCol.col-lg-2 {
+    padding: 0;
+    margin: 0;
+    width: 14.5%;
+}
+
+.sidebarCol.col-lg-2 {
+    padding: 0;
+    margin: 0;
+    width: 16.5%;
+}
+
+.wrapper {
+    width: 115%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.logo-image {
+    width: 78%;
+    height: auto;
+    margin-left: 10%;
+}
+
+.mainscreenCol.col-lg-10 {
+    height: 100vh;
+    background: aliceblue;
+}
