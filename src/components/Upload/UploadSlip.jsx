@@ -9,58 +9,85 @@ const { Dragger } = AntdUpload;
 const UploadSlip = () => {
   const [fileList, setFileList] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [processedFiles, setProcessedFiles] = useState([]);
+  const [filename, setFilename] = useState(''); // State to keep track of the filename
 
   const props = {
     name: 'file',
-    multiple: false, // Restrict to one file at a time
-    action: '', // Set this to your server URL when implementing real upload
-    showUploadList: false, // Hide the default upload list
+    multiple: false,
+    showUploadList: false,
     beforeUpload(file) {
-      // Add file to the list
       setFileList([file]);
-      return false; // Prevent automatic upload
+      setFilename(file.name); // Save the filename
+      return false;
     },
     onRemove() {
-      // Clear file list when removed
       setFileList([]);
-    },
-    onChange(info) {
-      const { status } = info.file;
-      if (status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully.`);
-        setFileList([]);
-      } else if (status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
+      setFilename(''); // Clear the filename when file is removed
     },
     onDrop(e) {
       console.log('Dropped files', e.dataTransfer.files);
     },
   };
 
-  const handleUpload = async () => {
+  const handleProcess = async () => {
+    if (!fileList.length) {
+      message.error('No file selected.');
+      return;
+    }
+
     setUploading(true);
     const formData = new FormData();
     formData.append('file', fileList[0]);
+    formData.append('filename', filename); // Include filename in form data
+
+    // Save filename and date in localStorage
+    const date = new Date().toISOString();
+    localStorage.setItem('lastProcessedFile', filename);
+    localStorage.setItem('lastProcessedDate', date);
 
     try {
-      const response = await axios.post('http://localhost:5000/upload', formData, {
+      const response = await axios.post('http://localhost:5000/process', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
 
       if (response.status === 200) {
-        message.success('File uploaded and processed successfully.');
+        message.success('File processed successfully.');
+        setProcessedFiles(response.data.files);
       } else {
-        message.error(`Upload failed: ${response.data.error}`);
+        message.error(`Processing failed: ${response.data.error}`);
       }
     } catch (error) {
-      message.error(`Upload failed: ${error.message}`);
+      message.error(`Processing failed: ${error.message}`);
     } finally {
       setUploading(false);
       setFileList([]);
+      setFilename('');
     }
+  };
+
+  const handleSendAllEmails = async () => {
+    const filenames = processedFiles;
+
+    if (filenames.length === 0) {
+      message.error('No files to send.');
+      return;
+    }
+
+    try {
+      // Send email functionality here
+      await axios.post('http://localhost:5000/send-email', { filenames });
+      message.info('Emails sent successfully.');
+    } catch (error) {
+      message.error(`Failed to send email: ${error.message}`);
+    }
+  };
+
+  const handleDownload = (filename) => {
+    const url = `http://localhost:5000/download/${filename}`;
+    window.open(url, '_blank');
   };
 
   return (
@@ -78,7 +105,7 @@ const UploadSlip = () => {
 
       {fileList.length > 0 && (
         <div className="file-list">
-          <h5 className='uploadh5'>Files to be uploaded:</h5>
+          <h5 className='uploadh5'>Files to be processed:</h5>
           <ul>
             {fileList.map(file => (
               <li key={file.uid} className='fileName'>{file.name}</li>
@@ -86,12 +113,32 @@ const UploadSlip = () => {
           </ul>
           <Button
             type="primary"
-            onClick={handleUpload}
+            onClick={handleProcess}
             className='SubmitBtn'
             loading={uploading}
             disabled={uploading}
           >
-            {uploading ? 'Uploading...' : 'Upload'}
+            {uploading ? 'Processing...' : 'Process'}
+          </Button>
+        </div>
+      )}
+
+      {processedFiles.length > 0 && (
+        <div className="processed-files">
+          <h5 className='uploadh5'>Processed Files:</h5>
+          <ul>
+            {processedFiles.map((file, index) => (
+              <li key={index} className='fileName'>
+                <a href="#" onClick={() => handleDownload(file)}>{file}</a>
+              </li>
+            ))}
+          </ul>
+          <Button
+            type="primary"
+            onClick={handleSendAllEmails}
+            className='SendEmailBtn'
+          >
+            Send All Emails
           </Button>
         </div>
       )}
