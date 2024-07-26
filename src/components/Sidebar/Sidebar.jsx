@@ -1,17 +1,23 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PersonIcon from '@mui/icons-material/Person';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import logo from "../../Assets/logo.png"
-import './Sidebar.css'; // Make sure to create a corresponding CSS file
+import logo from "../../Assets/logo.png";
+import './Sidebar.css';
 
 const Sidebar = () => {
-//   const handleLogout = () => {
-//     localStorage.removeItem('email');
-//     localStorage.removeItem('password');
-//     window.location.href = '/login'; // Redirect to login page
-//   };
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('token');
+    navigate('/login');
+    window.location.reload(); // Force a page reload
+
+  
+  };
 
   return (
     <div className="sidebar">
@@ -20,15 +26,23 @@ const Sidebar = () => {
           <img src={logo} alt="Logo" className="logo-image" />
         </div>
         <div className='option-wrapper'>
-          <div className="sidebar-link">Dashboard <DashboardIcon className="sidebar-icon" /></div>
-          <div className="sidebar-link">Upload Slip <DriveFolderUploadIcon className="sidebar-icon" /></div>
-          <div className="sidebar-link">Employee Details <PersonIcon className="sidebar-icon" /></div>
+          <div className="sidebar-link" onClick={() => navigate('/dashboard')}>
+            Dashboard <DashboardIcon className="sidebar-icon" />
+          </div>
+          <div className="sidebar-link" onClick={() => navigate('/upload-slip')}>
+            Upload Slip <DriveFolderUploadIcon className="sidebar-icon" />
+          </div>
+          <div className="sidebar-link" onClick={() => navigate('/employee-details')}>
+            Employee Details <PersonIcon className="sidebar-icon" />
+          </div>
         </div>
-        <div className='logout'>
-          <div className="sidebar-link">Logout <ExitToAppIcon className="sidebar-icon" /></div>
-          {/* onClick={handleLogout} */}
+        <div className='logout' onClick={handleLogout}>
+          <div className="sidebar-link">
+            Logout <ExitToAppIcon className="sidebar-icon" />
+          </div>
         </div>
       </div>
+      <div className="backdrop" />
     </div>
   );
 };

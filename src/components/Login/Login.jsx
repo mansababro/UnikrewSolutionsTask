@@ -3,6 +3,8 @@ import { Button, Col, Container, Row } from 'react-bootstrap';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 import Logo from "../../Assets/logo.png";
 import "../Login/Login.css";
@@ -10,12 +12,16 @@ import "../Login/Login.css";
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
         if (!email || !password) {
             toast.error('Please enter both email and password');
             return;
         }
+
+        setLoading(true);
 
         try {
             const response = await axios.post('https://us-east-1.aws.data.mongodb-api.com/app/application-0-jekzxop/endpoint/Login', {
@@ -25,15 +31,18 @@ const Login = () => {
 
             if (response.data.success) {
                 toast.success('Login successful');
-                // Store email and password in localStorage
-                localStorage.setItem('email', email);
-                localStorage.setItem('password', password);
+                sessionStorage.setItem('email', email);
+                sessionStorage.setItem('token', response.data.token); // Assuming response contains a token
+                navigate('/');
+                window.location.reload(); // Force a page reload
             } else {
                 toast.error('Login failed');
             }
         } catch (error) {
             toast.error('Error logging in');
             console.error('Error logging in', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -73,6 +82,9 @@ const Login = () => {
                 </Row>
                 <ToastContainer />
             </Container>
+            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </section>
     );
 };
