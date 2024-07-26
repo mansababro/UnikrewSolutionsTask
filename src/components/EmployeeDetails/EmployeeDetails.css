@@ -1,0 +1,73 @@
+/* EmployeeDetails.css */
+
+th.TitleX {
+    font-family: Kanit;
+    background: black;
+    color: white;
+    padding: 25px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.EmployeeTable {
+    margin-top: 3%;
+}
+
+.empNumber, .empName, .empEmail, .empDesignation {
+    font-family: Kanit !important;
+    font-size: 16px !important;
+}
+
+.empName {
+    color: #a14a48 !important;
+}
+
+.empEmail, .empDesignation {
+    color: black !important;
+}
+
+h3.EmployeeDetailsTitle {
+    margin-top: 5%;
+    font-weight: 600;
+}
+
+.empNumber {
+    text-decoration: underline !important;
+    padding: 19px !important;
+}
+
+h3.EmployeeDetailsTitle {
+    margin-top: 2%;
+    font-weight: 600;
+}
+
+th.empNumber {
+    line-height: 10px;
+}
+
+th.MuiTableCell-head.TitleX {
+    font-family: Poppins;
+}
+
+td.empEmail {
+    font-family: Poppins !important;
+    font-size: 14px !important;
+}
+
+td.empName{
+    font-family: Poppins !important;
+    font-size: 14px !important;
+
+}
+
+td.empDesignation{
+    font-family: Poppins !important;
+    font-size: 14px !important;
+
+}
+
+th.empNumber {
+    line-height: 10px;
+    font-family: Poppins !important;
+    font-size: 14px !important;
+}
