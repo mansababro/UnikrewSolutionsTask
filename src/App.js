@@ -1,13 +1,15 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Layout from './components/Layout/Layout';
+import Login from './components/Login/Login';
+// import Layout from './components/Layout/Layout';
 
 
 
 function App() {
   return (
     <>
-    <Layout/>
+    {/* <Layout/> */}
+    <Login/>
     </>
   );
 }
