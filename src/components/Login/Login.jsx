@@ -82,7 +82,7 @@ const Login = () => {
                 </Row>
                 <ToastContainer />
             </Container>
-            <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
+             <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loading}>
                 <CircularProgress color="inherit" />
             </Backdrop>
         </section>
