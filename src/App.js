@@ -6,6 +6,7 @@ import Login from './components/Login/Login';
 import Layout from './components/Layout/Layout';
 import UploadSlip from './components/Upload/UploadSlip';
 import EmployeeDetails from './components/EmployeeDetails/EmployeeDetails';
+import Dashboard from './components/Dashboard/Dashboard';
 
 function App() {
   const isAuthenticated = () => {
@@ -22,7 +23,7 @@ function App() {
           <Route index element={<UploadSlip />} />
           <Route path="upload-slip" element={<UploadSlip />} />
           <Route path="employee-details" element={<EmployeeDetails />} />
-          <Route path="dashboard" element={<UploadSlip />} />
+          <Route path="dashboard" element={<Dashboard />} />
         </Route>
         <Route path="*" element={<Navigate to={isAuthenticated() ? "/" : "/login"} />} />
       </Routes>
